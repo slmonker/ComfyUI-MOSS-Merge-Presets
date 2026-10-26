@@ -1,10 +1,10 @@
 # ComfyUI MOSS Base+SFT Merge Presets
 
+**English** | [简体中文](README_ZH.md)
+
 [![ComfyUI](https://img.shields.io/badge/ComfyUI-custom_node-blue)](https://github.com/comfyanonymous/ComfyUI)
 [![MOSS-Image](https://img.shields.io/badge/Model-MOSS--Image-orange)](https://github.com/OpenMOSS/MOSS-Image)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![中文](https://img.shields.io/badge/README-中文-red)](README_ZH.md)
-
 A ComfyUI custom node for merging **MOSS-Image Base** and **SFT** with reproducible presets or full per-layer control.
 
 The goal is to retain Base's composition and natural realism while selectively inheriting SFT's typography, material, and fine-detail strengths.

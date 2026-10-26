@@ -1,10 +1,10 @@
 # ComfyUI MOSS Base+SFT Merge Presets
 
+[English](README.md) | **简体中文**
+
 [![ComfyUI](https://img.shields.io/badge/ComfyUI-custom_node-blue)](https://github.com/comfyanonymous/ComfyUI)
 [![MOSS-Image](https://img.shields.io/badge/Model-MOSS--Image-orange)](https://github.com/OpenMOSS/MOSS-Image)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![English](https://img.shields.io/badge/README-English-blue)](README.md)
-
 一个用于 **MOSS-Image Base + SFT** 的 ComfyUI 自定义节点，提供可复现的预设融合和完整的逐层手调模式。
 
 目标是：**保留 Base 的构图与自然写实感，同时吸收 SFT 的文字、材质和微细节能力。**
