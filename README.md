@@ -35,15 +35,8 @@ From left to right: **Base**, **SFT**, **Base-preserve**, **Balanced**, and **SF
 - A live `merge_info` readout showing effective weights after `strength` scaling.
 - No extra Python dependencies beyond ComfyUI itself.
 - Native **int8c / convrot Base + SFT** merging support.
-- Save the merged diffusion model to a custom directory as `.safetensors`.
 - Compatible with the native ComfyUI MOSS-Image loader and sampling chain.
-
-## Nodes
-
-| Node | Purpose |
-|---|---|
-| **MOSS Base+SFT Merge Preset** | Blends a MOSS Base `MODEL` and SFT `MODEL` using presets or 51 editable component weights. |
-| **MOSS Merge Save Model** | Saves the merged `MODEL` to a custom directory as a diffusion-model-only `.safetensors` file. |
+- Pairs with ComfyUI's built-in **ModelSave** and model-only LoRA loader nodes.
 
 ## Requirements
 
@@ -95,35 +88,34 @@ SFT MODEL ──┘
 ```
 
 5. Start with `Balanced` and `strength = 1.0`.
-6. To save the result, connect the merged `MODEL` to **MOSS Merge Save Model**.
 
-## Save the merged model
+## Saving the merged model
 
-Add **MOSS Merge Save Model** from the same `model/merging/moss` category and connect the merged `MODEL` to it.
-
-```text
-                              ┌─ ModelSamplingSD3 → SkipLayerGuidanceDiTSimple → KSampler
-Base MODEL ─┐                 │
-            ├─ Merge Preset ──┤
-SFT MODEL ──┘                 │
-                              └─ MOSS Merge Save Model
-```
-
-Example settings:
+This package does not need a separate save node. Add ComfyUI's built-in **ModelSave** node (shown as **Save Model** in some locales, category `model/merging`) after the merge node, then connect the merged `MODEL` to its `model` input:
 
 ```text
-output_directory: D:\models\moss_merged
-filename_prefix:  moss_balanced_s100
-overwrite:        false
-save_metadata:    true
+Base MODEL ─┐
+            ├─ MOSS Base+SFT Merge Preset ─┬─ ModelSave
+SFT MODEL ──┘                              └─ ModelSamplingSD3 → SkipLayerGuidanceDiTSimple → KSampler
 ```
 
-- `output_directory`: the folder on the ComfyUI host machine. Use an absolute path such as `D:\models\moss`, or a relative path such as `moss_merged` to save under `ComfyUI/output/moss_merged`.
-- `filename_prefix`: output filename without the extension.
-- `overwrite`: overwrite the exact target file; otherwise a numeric suffix is added.
-- `save_metadata`: embed the workflow prompt and merge-save metadata when available.
+Set `filename_prefix` without an extension, for example `diffusion_models/moss_balanced_s100`. ComfyUI saves the file under `ComfyUI/output/diffusion_models/` using its normal counter-based naming. To load it later with **Load Diffusion Model**, move the finished `.safetensors` file into `ComfyUI/models/diffusion_models/` (or the equivalent configured model directory).
 
-The node writes a **diffusion-model-only** `.safetensors` file. It does not include the text encoder or VAE. Load the saved file with **Load Diffusion Model**. If the Base input is int8c, the saved model keeps the int8c layout. Saving is performed through a temporary file and then atomically renamed, so an interrupted save does not replace an existing model with a partial file.
+**ModelSave** is an output node, so it has no `MODEL` output. Branch it from the merge output while the sampling chain continues separately. The saved file contains the diffusion model produced by the merge node; it does not include the text encoder or VAE.
+
+## Using LoRA after the merge
+
+Add ComfyUI's **Load LoRA** node (`LoraLoaderModelOnly`, category `model/loaders`) after **MOSS Base+SFT Merge Preset**:
+
+```text
+Base MODEL ─┐
+            ├─ MOSS Base+SFT Merge Preset ─ Load LoRA ─ ModelSamplingSD3 → SkipLayerGuidanceDiTSimple → KSampler
+SFT MODEL ──┘
+```
+
+Connect the merged `MODEL` to the LoRA node's `model` input, select the LoRA file, and set `strength_model`. The LoRA is applied to the merged model at inference time; multiple Load LoRA nodes can be chained. If you also want to save the Base+SFT merge, branch **ModelSave** directly from the merge output as shown above so later LoRA changes stay independent.
+
+![MOSS Base+SFT Merge Preset followed by a model-only Load LoRA node](assets/moss-merge-lora-workflow.png)
 
 ## Presets
 

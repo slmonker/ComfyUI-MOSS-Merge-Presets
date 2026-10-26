@@ -35,15 +35,8 @@
 - `merge_info` 实时显示经过 `strength` 缩放后的有效层权重。
 - 除 ComfyUI 本身外不需要额外 Python 依赖。
 - 原生支持 **int8c / convrot Base + SFT** 融合。
-- 支持把融合后的扩散模型保存到自定义目录，格式为 `.safetensors`。
 - 兼容 ComfyUI 原生 MOSS-Image 加载和采样链。
-
-## 节点说明
-
-| 节点 | 用途 |
-|---|---|
-| **MOSS Base+SFT Merge Preset** | 使用预设或 51 个可编辑组件权重，融合 MOSS Base `MODEL` 与 SFT `MODEL`。 |
-| **MOSS Merge Save Model** | 把融合后的 `MODEL` 保存到自定义目录，输出仅包含扩散模型的 `.safetensors` 文件。 |
+- 可与 ComfyUI 内置 **ModelSave** 和仅模型 LoRA 加载节点串联使用。
 
 ## 环境要求
 
@@ -95,37 +88,34 @@ SFT MODEL ──┘
 ```
 
 5. 先用 `Balanced`、`strength = 1.0`。
-6. 如果需要保存结果，把融合后的 `MODEL` 接到 **MOSS Merge Save Model**。
 
 ## 保存融合模型
 
-在同一个 `model/merging/moss` 分类中添加 **MOSS Merge Save Model**，把融合后的 `MODEL` 接到它。
+本项目不需要额外的保存节点。在融合节点后面添加 ComfyUI 内置的 **ModelSave** 节点（部分中文界面显示为“保存模型”，分类为 `model/merging`），把融合后的 `MODEL` 接到它的 `model` 输入：
 
 ```text
-                              ┌─ ModelSamplingSD3 → SkipLayerGuidanceDiTSimple → KSampler
-Base MODEL ─┐                 │
-            ├─ Merge Preset ──┤
-SFT MODEL ──┘                 │
-                              └─ MOSS Merge Save Model
+Base MODEL ─┐
+            ├─ MOSS Base+SFT Merge Preset ─┬─ ModelSave
+SFT MODEL ──┘                              └─ ModelSamplingSD3 → SkipLayerGuidanceDiTSimple → KSampler
 ```
 
-示例设置：
+`filename_prefix` 不需要填写扩展名，例如 `diffusion_models/moss_balanced_s100`。ComfyUI 会按自身的计数命名规则把文件保存到 `ComfyUI/output/diffusion_models/`。之后如果要用 **Load Diffusion Model** 加载，请把完成的 `.safetensors` 文件移到 `ComfyUI/models/diffusion_models/`（或你实际配置的模型目录）。
+
+**ModelSave** 是输出节点，没有 `MODEL` 输出。请从融合节点的输出分出一条线接给它，同时让采样链继续向后连接。它保存的是融合节点产生的扩散模型，不包含文本编码器和 VAE。
+
+## 在融合后使用 LoRA
+
+在 **MOSS Base+SFT Merge Preset** 后面添加 ComfyUI 的 **Load LoRA** 节点（`LoraLoaderModelOnly`，分类为 `model/loaders`）：
 
 ```text
-output_directory: D:\models\moss_merged
-filename_prefix:  moss_balanced_s100
-overwrite:        false
-save_metadata:    true
+Base MODEL ─┐
+            ├─ MOSS Base+SFT Merge Preset ─ Load LoRA ─ ModelSamplingSD3 → SkipLayerGuidanceDiTSimple → KSampler
+SFT MODEL ──┘
 ```
 
-- `output_directory`：ComfyUI 所在电脑上的保存目录。可以填写绝对路径，例如 `D:\models\moss`；也可以填写相对路径，例如 `moss_merged`，文件会保存到 `ComfyUI/output/moss_merged`。
-- `filename_prefix`：输出文件名前缀，不需要填写扩展名。
-- `overwrite`：开启后覆盖同名文件；关闭时会自动增加数字后缀。
-- `save_metadata`：可用时把工作流提示词和融合保存信息写入模型元数据。
+把融合后的 `MODEL` 接到 LoRA 节点的 `model` 输入，选择 LoRA 文件并设置 `strength_model`。LoRA 会在推理时作用于融合后的模型，也可以连续串联多个 Load LoRA 节点。如果同时需要保存 Base+SFT 融合结果，请按上面的方式从融合节点直接分线到 **ModelSave**，这样以后调整 LoRA 时不会影响已保存的融合模型。
 
-这个节点保存的是**仅包含扩散模型的 `.safetensors` 文件**，不包含文本编码器和 VAE；之后使用 **Load Diffusion Model** 加载。如果 Base 是 int8c，保存后的模型仍然保持 int8c 格式。保存过程会先写临时文件，再原子替换目标文件，因此中途失败不会用残缺文件覆盖已有模型。
-
-注意：`output_directory` 是 ComfyUI 主机上的路径，不是浏览器的默认下载目录。
+![MOSS Base+SFT Merge Preset 后接仅模型 LoRA 加载节点](assets/moss-merge-lora-workflow.png)
 
 ## 预设
 

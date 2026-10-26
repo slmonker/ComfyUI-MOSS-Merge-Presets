@@ -1,10 +1,6 @@
 from __future__ import annotations
 
-import json
 import logging
-import os
-import uuid
-from pathlib import Path
 from typing import Dict
 
 NODE_CLASS_MAPPINGS = {}
@@ -80,46 +76,6 @@ def _get_key_patches_compatible(model, filter_prefix: str):
             exc,
         )
         return _get_filtered_key_patches(model, filter_prefix)
-
-
-def _resolve_output_directory(output_directory: str) -> Path:
-    """Resolve an absolute path or a path relative to ComfyUI's output dir."""
-    import folder_paths
-
-    raw = (output_directory or "").strip().strip('"')
-    if not raw:
-        raw = folder_paths.get_output_directory()
-    else:
-        raw = os.path.expandvars(os.path.expanduser(raw))
-        if not os.path.isabs(raw):
-            raw = os.path.join(folder_paths.get_output_directory(), raw)
-    return Path(os.path.abspath(raw))
-
-
-def _sanitize_filename_prefix(filename_prefix: str) -> str:
-    value = (filename_prefix or "").strip().strip('"')
-    if value.lower().endswith(".safetensors"):
-        value = value[: -len(".safetensors")]
-    for char in '<>:"/\\|?*':
-        value = value.replace(char, "_")
-    value = "".join(char for char in value if ord(char) >= 32).strip(" .")
-    return value or "moss_merge"
-
-
-def _next_model_path(directory: Path, filename_prefix: str, overwrite: bool) -> Path:
-    directory.mkdir(parents=True, exist_ok=True)
-    if overwrite:
-        return directory / f"{filename_prefix}.safetensors"
-
-    candidate = directory / f"{filename_prefix}.safetensors"
-    if not candidate.exists():
-        return candidate
-    counter = 1
-    while True:
-        candidate = directory / f"{filename_prefix}_{counter:05d}_.safetensors"
-        if not candidate.exists():
-            return candidate
-        counter += 1
 
 
 def _build_preset(*, early, early_late, mid_early, mid_late, late_early, late_late, global_scale, final_linear):
@@ -257,106 +213,7 @@ class MOSSMergePreset:
         return (merged,)
 
 
-class MOSSMergeSaveModel:
-    """Save the merged MOSS diffusion model to a custom directory."""
-
-    CATEGORY = "model/merging/moss"
-    FUNCTION = "save"
-    RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("saved_path",)
-    OUTPUT_TOOLTIPS = ("Absolute path to the saved .safetensors diffusion model.",)
-    OUTPUT_NODE = True
-    DESCRIPTION = (
-        "Save a merged MOSS-Image diffusion MODEL as .safetensors. "
-        "Use an absolute output directory, or a relative path under ComfyUI/output. "
-        "The saved file loads with the Load Diffusion Model node."
-    )
-
-    @classmethod
-    def INPUT_TYPES(cls):
-        import folder_paths
-
-        default_directory = os.path.join(folder_paths.get_output_directory(), "moss_merged")
-        return {
-            "required": {
-                "model": ("MODEL",),
-                "output_directory": ("STRING", {
-                    "default": default_directory,
-                    "multiline": False,
-                    "tooltip": "Absolute path such as D:\\models\\moss, or a relative path under ComfyUI/output.",
-                }),
-                "filename_prefix": ("STRING", {
-                    "default": "moss_merge",
-                    "multiline": False,
-                    "tooltip": "Output filename prefix. A counter is added if the file already exists.",
-                }),
-                "overwrite": ("BOOLEAN", {
-                    "default": False,
-                    "tooltip": "Overwrite the exact target file instead of adding a counter.",
-                }),
-                "save_metadata": ("BOOLEAN", {
-                    "default": True,
-                    "tooltip": "Embed the workflow prompt and MOSS merge metadata when available.",
-                }),
-            },
-            "hidden": {
-                "prompt": "PROMPT",
-                "extra_pnginfo": "EXTRA_PNGINFO",
-            },
-        }
-
-    def save(
-        self,
-        model,
-        output_directory,
-        filename_prefix,
-        overwrite,
-        save_metadata,
-        prompt=None,
-        extra_pnginfo=None,
-    ):
-        import comfy.sd
-
-        output_dir = _resolve_output_directory(output_directory)
-        prefix = _sanitize_filename_prefix(filename_prefix)
-        final_path = _next_model_path(output_dir, prefix, bool(overwrite))
-        temp_path = final_path.with_name(
-            f".{final_path.stem}.{uuid.uuid4().hex}.part.safetensors"
-        )
-
-        metadata = {}
-        if save_metadata:
-            metadata["format"] = "pt"
-            metadata["moss_merge.saved_by"] = "ComfyUI-MOSS-Merge-Presets"
-            if prompt is not None:
-                metadata["prompt"] = json.dumps(prompt, ensure_ascii=False)
-            if extra_pnginfo is not None:
-                for key, value in extra_pnginfo.items():
-                    metadata[key] = json.dumps(value, ensure_ascii=False)
-
-        try:
-            comfy.sd.save_checkpoint(
-                str(temp_path),
-                model,
-                metadata=metadata,
-            )
-            os.replace(temp_path, final_path)
-        except Exception:
-            temp_path.unlink(missing_ok=True)
-            raise
-
-        size_mb = final_path.stat().st_size / (1024 * 1024)
-        message = f"Saved MOSS model: {final_path} ({size_mb:.1f} MB)"
-        logging.info(message)
-        return {
-            "ui": {"text": [message]},
-            "result": (str(final_path),),
-        }
-
-
 NODE_CLASS_MAPPINGS["MOSSMergePreset"] = MOSSMergePreset
-NODE_CLASS_MAPPINGS["MOSSMergeSaveModel"] = MOSSMergeSaveModel
 NODE_DISPLAY_NAME_MAPPINGS["MOSSMergePreset"] = "MOSS Base+SFT Merge Preset"
-NODE_DISPLAY_NAME_MAPPINGS["MOSSMergeSaveModel"] = "MOSS Merge Save Model"
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]

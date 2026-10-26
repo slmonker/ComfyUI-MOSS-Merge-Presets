@@ -1,12 +1,5 @@
 # Changelog
 
-## 1.0.3
-
-- Added the MOSS Merge Save Model node.
-- Supports absolute custom directories and paths relative to ComfyUI/output.
-- Saves diffusion-model-only safetensors with optional metadata.
-- Uses atomic temporary-file replacement and counter-based collision handling.
-
 ## 1.0.2
 
 - Added int8c/convrot Base + SFT compatibility.
