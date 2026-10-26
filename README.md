@@ -80,7 +80,10 @@ Drag the downloaded JSON file onto the ComfyUI canvas to import it. The example 
 - optional local prompt expansion through **MOSS Prompt Enhancer**;
 - sampling the merged model and saving the generated image.
 
-The workflow requires this custom node and [ComfyUI-MOSS-PromptEnhancer](https://github.com/slmonker/ComfyUI-MOSS-PromptEnhancer) for the `MOSSPromptEnhancerLocal` node. If you do not need prompt expansion, remove or bypass that branch and connect your own positive prompt directly to the sampler. Reselect the Base, SFT, text encoder, and VAE files in their loader nodes if your local filenames differ from the example.
+> [!IMPORTANT]
+> The example workflow uses the **MOSS Prompt Enhancer** node (`MOSSPromptEnhancerLocal`) from **[ComfyUI-MOSS-PromptEnhancer](https://github.com/slmonker/ComfyUI-MOSS-PromptEnhancer)**. Install that companion project before importing the workflow. If you do not need prompt expansion, remove or bypass the node and connect your positive prompt directly to the sampler.
+
+Reselect the Base, SFT, text encoder, and VAE files in their loader nodes if your local filenames differ from the example.
 
 ## Usage
 
@@ -264,6 +267,7 @@ MIT. See [LICENSE](LICENSE).
 
 - [OpenMOSS / MOSS-Image](https://github.com/OpenMOSS/MOSS-Image)
 - [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
+- [ComfyUI-MOSS-PromptEnhancer](https://github.com/slmonker/ComfyUI-MOSS-PromptEnhancer)
 - The ComfyUI model-merging API and MOSS-Image community integrations
 
 ## Changelog

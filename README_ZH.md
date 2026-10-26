@@ -80,7 +80,10 @@ git clone https://github.com/slmonker/ComfyUI-MOSS-Merge-Presets.git
 - 可选的本地 **MOSS Prompt Enhancer** 提示词扩写分支；
 - 使用融合模型采样并保存生成图片。
 
-工作流需要本项目和 [ComfyUI-MOSS-PromptEnhancer](https://github.com/slmonker/ComfyUI-MOSS-PromptEnhancer) 提供的 `MOSSPromptEnhancerLocal` 节点。如果不需要提示词扩写，可以删除或绕过该分支，把自己的正向提示词直接接到采样链。若本地模型文件名与示例不同，请在对应的加载器节点中重新选择 Base、SFT、文本编码器和 VAE。
+> [!IMPORTANT]
+> 示例工作流会使用 **[ComfyUI-MOSS-PromptEnhancer](https://github.com/slmonker/ComfyUI-MOSS-PromptEnhancer)** 项目提供的 **MOSS Prompt Enhancer** 提示词强化节点（`MOSSPromptEnhancerLocal`）。导入工作流前请先安装该项目。如果不需要提示词扩写，可以删除或绕过该节点，把正向提示词直接接到采样链。
+
+若本地模型文件名与示例不同，请在对应的加载器节点中重新选择 Base、SFT、文本编码器和 VAE。
 
 ## 使用
 
@@ -264,6 +267,7 @@ MIT，详见 [LICENSE](LICENSE)。
 
 - [OpenMOSS / MOSS-Image](https://github.com/OpenMOSS/MOSS-Image)
 - [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
+- [ComfyUI-MOSS-PromptEnhancer](https://github.com/slmonker/ComfyUI-MOSS-PromptEnhancer)
 - ComfyUI 模型融合 API 与 MOSS-Image 社区集成
 
 ## 更新记录
