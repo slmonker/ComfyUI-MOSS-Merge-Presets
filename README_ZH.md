@@ -104,7 +104,8 @@ SFT MODEL ──┘
 
 - `0.0` = 纯 Base
 - `1.0` = 当前预设
-- 大于 `1.0` = 加强当前预设，单项最高限制为 `1.0`
+- 大于 `1.0` = 加强当前预设，单项最高限制为 `1.0`n
+注意：由于每项都会在 `1.0` 截断，`1.25` 不是统一的 25% 增强。`SFT-detail` 在 `1.25` 仍然是混合模型，不等于纯 SFT。
 
 ## Custom 模式
 
@@ -210,3 +211,9 @@ MIT，详见 [LICENSE](LICENSE)。
 - [OpenMOSS / MOSS-Image](https://github.com/OpenMOSS/MOSS-Image)
 - [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
 - ComfyUI 模型融合 API 与 MOSS-Image 社区集成
+
+## 更新记录
+
+详见 [CHANGELOG.md](CHANGELOG.md)。
+
+

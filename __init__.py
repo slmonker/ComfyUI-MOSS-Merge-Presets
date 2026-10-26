@@ -134,7 +134,10 @@ class MOSSMergePreset:
                     ratio = value
                     break
             ratio = min(1.0, max(0.0, ratio * strength))
-            merged.add_patches({key: patches}, 1.0 - ratio, ratio)
+            # Public merge values are SFT weights: 0=Base, 1=SFT.
+            # ComfyUI add_patches uses (strength_patch, strength_model), where
+            # strength_model scales the cloned Base and strength_patch scales SFT.
+            merged.add_patches({key: patches}, ratio, 1.0 - ratio)
         return (merged,)
 
 
@@ -142,3 +145,4 @@ NODE_CLASS_MAPPINGS["MOSSMergePreset"] = MOSSMergePreset
 NODE_DISPLAY_NAME_MAPPINGS["MOSSMergePreset"] = "MOSS Base+SFT Merge Preset"
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
+

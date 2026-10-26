@@ -104,7 +104,8 @@ Merge weights use `0 = Base` and `1 = SFT`.
 
 - `0.0` = pure Base
 - `1.0` = selected preset
-- values above `1.0` amplify the preset until each component reaches `1.0`
+- values above `1.0` amplify the preset until each component reaches `1.0`n
+Note: because each component is clamped at `1.0`, `1.25` is not a uniform 25% increase. `SFT-detail` at `1.25` is still a blend, not pure SFT.
 
 ## Custom Mode
 
@@ -210,3 +211,9 @@ MIT. See [LICENSE](LICENSE).
 - [OpenMOSS / MOSS-Image](https://github.com/OpenMOSS/MOSS-Image)
 - [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
 - The ComfyUI model-merging API and MOSS-Image community integrations
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
+
+

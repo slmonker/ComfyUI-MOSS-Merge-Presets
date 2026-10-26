@@ -1,6 +1,6 @@
 [project]
 name = "comfyui-moss-merge-presets"
-version = "1.0.0"
+version = "1.0.1"
 description = "ComfyUI preset and per-layer Base+SFT merge node for MOSS-Image"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -17,3 +17,4 @@ classifiers = [
 [tool.comfy]
 PublisherId = "slmonker"
 DisplayName = "MOSS Base+SFT Merge Presets"
+
