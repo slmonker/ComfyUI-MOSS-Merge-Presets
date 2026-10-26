@@ -13,7 +13,7 @@ The goal is to retain Base's composition and natural realism while selectively i
 
 ## Preview
 
-From left to right: **Base**, **SFT**, **Base-preserve**, **Balanced**, and **SFT-detail**.
+The material and typography sheets show, from left to right: **Base**, **SFT**, **Base-preserve**, **Balanced**, and **SFT-detail**. The portrait sheet also includes **Balanced** at strengths **0.1** and **0.3**.
 
 ### Portrait
 

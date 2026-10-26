@@ -13,7 +13,7 @@
 
 ## 效果预览
 
-从左到右：**Base、SFT、Base-preserve、Balanced、SFT-detail**。
+材质与文字预览从左到右依次为：**Base、SFT、Base-preserve、Balanced、SFT-detail**。人物预览还包含 **Balanced** 在强度 **0.1** 和 **0.3** 下的结果。
 
 ### 人物肖像
 
