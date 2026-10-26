@@ -69,6 +69,19 @@ git clone https://github.com/slmonker/ComfyUI-MOSS-Merge-Presets.git
 
 重启 ComfyUI。
 
+## 示例工作流
+
+[**下载 `moss-merge-model.json`**](example_workflows/moss-merge-model.json)
+
+把下载的 JSON 文件拖入 ComfyUI 画布即可导入。该示例包含：
+
+- 加载 MOSS-Image Base 与 SFT 扩散模型；
+- 使用 **MOSS Base+SFT Merge Preset** 以 `Balanced`、`strength = 1.0` 融合两个模型；
+- 可选的本地 **MOSS Prompt Enhancer** 提示词扩写分支；
+- 使用融合模型采样并保存生成图片。
+
+工作流需要本项目和 [ComfyUI-MOSS-PromptEnhancer](https://github.com/slmonker/ComfyUI-MOSS-PromptEnhancer) 提供的 `MOSSPromptEnhancerLocal` 节点。如果不需要提示词扩写，可以删除或绕过该分支，把自己的正向提示词直接接到采样链。若本地模型文件名与示例不同，请在对应的加载器节点中重新选择 Base、SFT、文本编码器和 VAE。
+
 ## 使用
 
 1. 添加两个扩散模型加载器：

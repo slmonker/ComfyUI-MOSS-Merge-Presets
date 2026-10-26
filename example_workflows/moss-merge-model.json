@@ -1,0 +1,1159 @@
+{
+  "id": "e8f30439-267f-45de-b260-db0d114b2c85",
+  "revision": 0,
+  "last_node_id": 64,
+  "last_link_id": 112,
+  "nodes": [
+    {
+      "id": 9,
+      "type": "SaveImage",
+      "pos": [
+        2151.022483896903,
+        866.0476272187783
+      ],
+      "size": [
+        1005.6912390607254,
+        734.3321426651978
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 65
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.42.0",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "moss_image_t2i_base"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "moss_image_t2i_base"
+      }
+    },
+    {
+      "id": 19,
+      "type": "ResolutionSelector",
+      "pos": [
+        -414.7754818957948,
+        91.50401235339172
+      ],
+      "size": [
+        402.4328439721288,
+        266.659263703224
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "showAdvanced": true,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            70,
+            104
+          ]
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            71,
+            105
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.42.0",
+        "Node name for S&R": "ResolutionSelector"
+      },
+      "widgets_values": [
+        "16:9 (Widescreen)",
+        2,
+        16
+      ],
+      "widgets_values_named": {
+        "aspect_ratio": "16:9 (Widescreen)",
+        "megapixels": 2,
+        "multiple": 16
+      }
+    },
+    {
+      "id": 37,
+      "type": "UNETLoader",
+      "pos": [
+        -560,
+        890
+      ],
+      "size": [
+        350,
+        90
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "slot_index": 0,
+          "links": [
+            89
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.42.0",
+        "Node name for S&R": "UNETLoader",
+        "models": [
+          {
+            "name": "moss_image_base_int8_convrot.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MOSS-Image/resolve/main/diffusion_models/moss_image_base_int8_convrot.safetensors",
+            "directory": "diffusion_models"
+          }
+        ]
+      },
+      "widgets_values": [
+        "moss\\moss_image_base_bf16.safetensors",
+        "default"
+      ],
+      "widgets_values_named": {
+        "unet_name": "moss\\moss_image_base_bf16.safetensors",
+        "weight_dtype": "default"
+      },
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 38,
+      "type": "CLIPTextEncode",
+      "pos": [
+        982.1228358551186,
+        902.9189504124655
+      ],
+      "size": [
+        449.9999605837703,
+        81.99999409240837
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 54
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": 103
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "slot_index": 0,
+          "links": [
+            57
+          ]
+        }
+      ],
+      "title": "Positive Prompt",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.42.0",
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "电影感半身人像写真，一位25岁左右的成年中国女性，五官清秀自然，黑色长直发，妆容淡雅，身穿月白色改良新中式旗袍，面料有细腻的暗纹与真实褶皱。她站在雨后江南园林的月洞门旁，侧身回望镜头，神情安静温柔。背景是虚化的青瓦白墙、竹影和柔和灯笼光，木质竖匾上清晰写着中文“春山”二字。自然窗光从左侧照入，真实皮肤纹理，可见细微毛孔与发丝，眼神自然，浅景深，85mm人像镜头，柔和胶片色调，高级杂志写真，构图干净，细节精致。"
+      ],
+      "widgets_values_named": {
+        "text": "电影感半身人像写真，一位25岁左右的成年中国女性，五官清秀自然，黑色长直发，妆容淡雅，身穿月白色改良新中式旗袍，面料有细腻的暗纹与真实褶皱。她站在雨后江南园林的月洞门旁，侧身回望镜头，神情安静温柔。背景是虚化的青瓦白墙、竹影和柔和灯笼光，木质竖匾上清晰写着中文“春山”二字。自然窗光从左侧照入，真实皮肤纹理，可见细微毛孔与发丝，眼神自然，浅景深，85mm人像镜头，柔和胶片色调，高级杂志写真，构图干净，细节精致。"
+      },
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 39,
+      "type": "CLIPLoader",
+      "pos": [
+        469.3850669119798,
+        1190.5384959223197
+      ],
+      "size": [
+        350,
+        140
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "slot_index": 0,
+          "links": [
+            54,
+            62
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.42.0",
+        "Node name for S&R": "CLIPLoader",
+        "models": [
+          {
+            "name": "qwen3.5_9b_w4a8_gptq.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MOSS-Image/resolve/main/text_encoders/qwen3.5_9b_w4a8_gptq.safetensors",
+            "directory": "text_encoders"
+          }
+        ]
+      },
+      "widgets_values": [
+        "moss\\qwen3.5_9b_int8_convrot.safetensors",
+        "moss_image",
+        "default"
+      ],
+      "widgets_values_named": {
+        "clip_name": "moss\\qwen3.5_9b_int8_convrot.safetensors",
+        "type": "moss_image",
+        "device": "default"
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 40,
+      "type": "KSampler",
+      "pos": [
+        1540.6223590594464,
+        857.0994802407438
+      ],
+      "size": [
+        290,
+        427.73553719008265
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 76
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 57
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 58
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 66
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "slot_index": 0,
+          "links": [
+            63
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.42.0",
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        666,
+        "fixed",
+        50,
+        3.5,
+        "euler",
+        "simple",
+        1
+      ],
+      "widgets_values_named": {
+        "seed": 666,
+        "control_after_generate": "fixed",
+        "steps": 50,
+        "cfg": 3.5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "denoise": 1
+      }
+    },
+    {
+      "id": 41,
+      "type": "VAELoader",
+      "pos": [
+        462.6889094579203,
+        1386.4837619071461
+      ],
+      "size": [
+        350,
+        60
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "slot_index": 0,
+          "links": [
+            64
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.42.0",
+        "Node name for S&R": "VAELoader",
+        "models": [
+          {
+            "name": "flux2-vae_small.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MOSS-Image/resolve/main/vae/flux2-vae_small.safetensors",
+            "directory": "vae"
+          }
+        ]
+      },
+      "widgets_values": [
+        "flux2-vae.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "flux2-vae.safetensors"
+      },
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 44,
+      "type": "EmptyFlux2LatentImage",
+      "pos": [
+        468.1561674509491,
+        1504.2524576650055
+      ],
+      "size": [
+        341.8849438260968,
+        121.35112722019676
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": 70
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": 71
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "slot_index": 0,
+          "links": [
+            66
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.42.0",
+        "Node name for S&R": "EmptyFlux2LatentImage"
+      },
+      "widgets_values": [
+        1024,
+        1024,
+        1
+      ],
+      "widgets_values_named": {
+        "width": 1024,
+        "height": 1024,
+        "batch_size": 1
+      },
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 45,
+      "type": "CLIPTextEncode",
+      "pos": [
+        987.716603043799,
+        1050.6795175755021
+      ],
+      "size": [
+        438.2399610060106,
+        139.44720005665636
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 62
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "slot_index": 0,
+          "links": [
+            58
+          ]
+        }
+      ],
+      "title": "Negative Prompt (empty = reference default)",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.42.0",
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "nsfw, worst quality, bad anatomy, watermark, jpeg artifact"
+      ],
+      "widgets_values_named": {
+        "text": "nsfw, worst quality, bad anatomy, watermark, jpeg artifact"
+      },
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 46,
+      "type": "VAEDecode",
+      "pos": [
+        1869.0585468760733,
+        854.8918057024366
+      ],
+      "size": [
+        230,
+        70
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 63
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 64
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            65
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.42.0",
+        "Node name for S&R": "VAEDecode"
+      }
+    },
+    {
+      "id": 47,
+      "type": "SkipLayerGuidanceDiTSimple",
+      "pos": [
+        470.4490842649482,
+        899.9814622734448
+      ],
+      "size": [
+        350,
+        210
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "showAdvanced": true,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 112
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            76
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.42.0",
+        "Node name for S&R": "SkipLayerGuidanceDiTSimple"
+      },
+      "widgets_values": [
+        "",
+        "22",
+        0,
+        0.5
+      ],
+      "widgets_values_named": {
+        "double_layers": "",
+        "single_layers": "22",
+        "start_percent": 0,
+        "end_percent": 0.5
+      }
+    },
+    {
+      "id": 50,
+      "type": "UNETLoader",
+      "pos": [
+        -560,
+        1070
+      ],
+      "size": [
+        350,
+        90
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "slot_index": 0,
+          "links": [
+            95
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.42.0",
+        "Node name for S&R": "UNETLoader",
+        "models": [
+          {
+            "name": "moss_image_base_int8_convrot.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MOSS-Image/resolve/main/diffusion_models/moss_image_base_int8_convrot.safetensors",
+            "directory": "diffusion_models"
+          }
+        ]
+      },
+      "widgets_values": [
+        "moss\\moss_image_sft_bf16.safetensors",
+        "default"
+      ],
+      "widgets_values_named": {
+        "unet_name": "moss\\moss_image_sft_bf16.safetensors",
+        "weight_dtype": "default"
+      },
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 55,
+      "type": "MOSSMergePreset",
+      "pos": [
+        -94.32959488052177,
+        900.0291214796106
+      ],
+      "size": [
+        440,
+        156
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "base_model",
+          "type": "MODEL",
+          "link": 89
+        },
+        {
+          "name": "sft_model",
+          "type": "MODEL",
+          "link": 95
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            112
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "slmonker/ComfyUI-MOSS-Merge-Presets",
+        "ver": "adaa27eeb827a722573bfc44b259db231d5b5cd2",
+        "Node name for S&R": "MOSSMergePreset"
+      },
+      "widgets_values": [
+        "Balanced",
+        1,
+        "Balanced | strength 1.00\nvideo_embedder=0.20  text_proj=0.20  text_blocks=0.16/0.16\ntime_embedding=0.24  shared_modulation=0.20\nlayers: L00=0.15 L01=0.15 L02=0.15 L03=0.15 L04=0.15 L05=0.15 L06=0.15 L07=0.15 L08=0.20 L09=0.20 L10=0.20 L11=0.20 L12=0.20 L13=0.20 L14=0.30 L15=0.30 L16=0.30 L17=0.30 L18=0.30 L19=0.30 L20=0.30 L21=0.30 L22=0.45 L23=0.45 L24=0.45 L25=0.45 L26=0.45 L27=0.45 L28=0.45 L29=0.45 L30=0.60 L31=0.60 L32=0.60 L33=0.60 L34=0.60 L35=0.60 L36=0.72 L37=0.72 L38=0.72 L39=0.72 L40=0.72 L41=0.72\nfinal_norm=0.20  final_linear=0.35  video_head=0.20",
+        0.2,
+        0.2,
+        0.16,
+        0.16,
+        0.24,
+        0.2,
+        0.15,
+        0.15,
+        0.15,
+        0.15,
+        0.15,
+        0.15,
+        0.15,
+        0.15,
+        0.2,
+        0.2,
+        0.2,
+        0.2,
+        0.2,
+        0.2,
+        0.3,
+        0.3,
+        0.3,
+        0.3,
+        0.3,
+        0.3,
+        0.3,
+        0.3,
+        0.45,
+        0.45,
+        0.45,
+        0.45,
+        0.45,
+        0.45,
+        0.45,
+        0.45,
+        0.6,
+        0.6,
+        0.6,
+        0.6,
+        0.6,
+        0.6,
+        0.72,
+        0.72,
+        0.72,
+        0.72,
+        0.72,
+        0.72,
+        0.2,
+        0.35,
+        0.2
+      ],
+      "widgets_values_named": {
+        "preset": "Balanced",
+        "strength": 1,
+        "merge_info": "Balanced | strength 1.00\nvideo_embedder=0.20  text_proj=0.20  text_blocks=0.16/0.16\ntime_embedding=0.24  shared_modulation=0.20\nlayers: L00=0.15 L01=0.15 L02=0.15 L03=0.15 L04=0.15 L05=0.15 L06=0.15 L07=0.15 L08=0.20 L09=0.20 L10=0.20 L11=0.20 L12=0.20 L13=0.20 L14=0.30 L15=0.30 L16=0.30 L17=0.30 L18=0.30 L19=0.30 L20=0.30 L21=0.30 L22=0.45 L23=0.45 L24=0.45 L25=0.45 L26=0.45 L27=0.45 L28=0.45 L29=0.45 L30=0.60 L31=0.60 L32=0.60 L33=0.60 L34=0.60 L35=0.60 L36=0.72 L37=0.72 L38=0.72 L39=0.72 L40=0.72 L41=0.72\nfinal_norm=0.20  final_linear=0.35  video_head=0.20",
+        "m_video_embedder": 0.2,
+        "m_text_proj": 0.2,
+        "m_text_block0": 0.16,
+        "m_text_block1": 0.16,
+        "m_time": 0.24,
+        "m_shared": 0.2,
+        "m_L00": 0.15,
+        "m_L01": 0.15,
+        "m_L02": 0.15,
+        "m_L03": 0.15,
+        "m_L04": 0.15,
+        "m_L05": 0.15,
+        "m_L06": 0.15,
+        "m_L07": 0.15,
+        "m_L08": 0.2,
+        "m_L09": 0.2,
+        "m_L10": 0.2,
+        "m_L11": 0.2,
+        "m_L12": 0.2,
+        "m_L13": 0.2,
+        "m_L14": 0.3,
+        "m_L15": 0.3,
+        "m_L16": 0.3,
+        "m_L17": 0.3,
+        "m_L18": 0.3,
+        "m_L19": 0.3,
+        "m_L20": 0.3,
+        "m_L21": 0.3,
+        "m_L22": 0.45,
+        "m_L23": 0.45,
+        "m_L24": 0.45,
+        "m_L25": 0.45,
+        "m_L26": 0.45,
+        "m_L27": 0.45,
+        "m_L28": 0.45,
+        "m_L29": 0.45,
+        "m_L30": 0.6,
+        "m_L31": 0.6,
+        "m_L32": 0.6,
+        "m_L33": 0.6,
+        "m_L34": 0.6,
+        "m_L35": 0.6,
+        "m_L36": 0.72,
+        "m_L37": 0.72,
+        "m_L38": 0.72,
+        "m_L39": 0.72,
+        "m_L40": 0.72,
+        "m_L41": 0.72,
+        "m_final_norm": 0.2,
+        "m_final_linear": 0.35,
+        "m_head": 0.2
+      }
+    },
+    {
+      "id": 57,
+      "type": "PreviewAny",
+      "pos": [
+        480.032662566107,
+        -137.59434114545616
+      ],
+      "size": [
+        431.3489129567372,
+        744.3730405539661
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 101
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.41.0",
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [],
+      "widgets_values_named": {}
+    },
+    {
+      "id": 58,
+      "type": "MOSSPromptEnhancerLocal",
+      "pos": [
+        42.83836696628828,
+        -141.36245442388412
+      ],
+      "size": [
+        386.6142279689156,
+        906.0000288744769
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "request",
+          "type": "STRING",
+          "widget": {
+            "name": "request"
+          },
+          "link": 102
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": 104
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": 105
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            101,
+            103
+          ]
+        },
+        {
+          "name": "draft_json",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "info",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MOSSPromptEnhancerLocal"
+      },
+      "widgets_values": [
+        "清晨的早点摊，招牌写着‘老街早餐’，自然纪实摄影。",
+        "Qwen3.8/Huihui-Qwen3.8-27B-abliterated-Q4_K.gguf",
+        "caption",
+        "中文",
+        1024,
+        1024,
+        999,
+        "fixed",
+        4096,
+        16384,
+        0.6,
+        "auto",
+        600,
+        "请按照 MOSS-Image Skill，把下面的画面需求扩写为细节充分、可直接用于图像生成的提示词。画面中实际出现的中文必须保持原文。\n\n请充分展开以下与本画面有关的内容：\n1. 主体的外貌、年龄、发型、服装、配饰及可见的材质细节。\n2. 具体动作，包括身体朝向、手部位置、重心、视线和面部表情，让姿态在单张图中能够成立。\n3. 前景、中景、背景的内容，以及人物、物品之间的空间关系和遮挡关系。\n4. 场景中的建筑、家具、道具、使用痕迹和有助于表达时代或地点的细节。\n5. 景别、机位、拍摄角度、透视关系、主体在画面中的位置和留白。\n6. 光源的位置、方向、软硬、颜色，以及它如何影响皮肤、衣料、玻璃或金属。\n7. 整体配色、摄影或绘画表现方式、画面质感与氛围。\n8. 如有文字，明确每段文字的准确内容、所在载体、位置、字形风格和可读性。\n\n保留我明确指定的人数、动作、服装、风格和文字，不擅自替换。\n未指定的纯视觉细节可合理补充，但不要添加新的故事情节、无关人物或相互矛盾的动作。\n不要编造真实产品参数、价格、认证或活动信息。\n用连贯的自然语言分段描述，不要写成标签堆砌。\n每段补充新的可见信息，避免反复强调“高清、精致、杰作”等空泛词。\n不要因为概括而省略关键细节，也不要为了凑长度重复描述。\n按节点要求返回结果，不附加解释或建议。\n",
+        "",
+        "Qwen3.8/mmproj-F16.gguf",
+        "auto",
+        "local",
+        "https://api.openai.com/v1",
+        "",
+        "",
+        "MOSS_API_KEY",
+        true,
+        "max_tokens",
+        true,
+        "这是一张充满生活气息的随手拍照片，记录了一位年轻的中国女性在大学女生宿舍内的私密时刻。画面采用手机前置或后置摄像头的广角视角，机位略高于视线水平，呈现出一种未经修饰的真实感。主体是一位二十岁左右的亚洲女性，皮肤在强烈的闪光灯照射下显得异常白皙，甚至带有一层因直射光产生的高光反光。她留着深棕色的长直发，发丝自然垂落在肩头，部分遮挡了脸颊，发质在硬光下呈现出明显的明暗分界。她身穿一件宽松的米白色棉质T恤，领口微松，下身穿着浅灰色的居家短裤，整体着装极度休闲，展现出放松的居家状态。\n\n她正坐在一张单人床的床沿上，身体重心略微前倾，双腿并拢或自然垂下，姿态随意。她的双手握着一部智能手机，屏幕亮着，光线反射在她的下巴和手指上。她的面部表情平静而专注，眼神聚焦在屏幕上，嘴唇微张，似乎正在阅读或打字。由于闪光灯的直射，她的面部轮廓被强化，鼻翼两侧和额头有明显的亮斑，而身后的墙壁则投下了清晰且边缘锐利的阴影，这种高对比度的光影效果是典型的老式闪光灯或近距离LED补光灯的特征。\n\n背景是典型的中国大学宿舍环境，空间紧凑但整洁。她身后是一张铺着浅蓝色床单的床铺，枕头随意地堆放在床头。墙壁上贴着几张色彩鲜艳的海报，其中一张隐约可见中文标语“加油”，另一张则是明星照片。右侧可以看到一个白色的简易书桌，上面堆叠着几本教科书和一个透明的塑料水杯，杯壁上还有水渍。左侧前景有一个半开的衣柜门，露出里面悬挂的几件外套。整个场景充满了生活痕迹，如散落在床边的发圈、桌角的一支笔，这些细节增强了画面的真实感和时代感。整体色调偏冷，以白色、浅蓝和米色为主，但在闪光灯的强光下，色彩饱和度较高，阴影部分则显得深邃，营造出一种既私密又略带生硬的夜间室内氛围。"
+      ],
+      "widgets_values_named": {
+        "request": "清晨的早点摊，招牌写着‘老街早餐’，自然纪实摄影。",
+        "model_name": "Qwen3.8/Huihui-Qwen3.8-27B-abliterated-Q4_K.gguf",
+        "output_mode": "caption",
+        "language": "中文",
+        "width": 1024,
+        "height": 1024,
+        "seed": 999,
+        "control_after_generate": "fixed",
+        "max_tokens": 4096,
+        "context_size": 16384,
+        "temperature": 0.6,
+        "device": "auto",
+        "timeout_seconds": 600,
+        "previous_prompt": "请按照 MOSS-Image Skill，把下面的画面需求扩写为细节充分、可直接用于图像生成的提示词。画面中实际出现的中文必须保持原文。\n\n请充分展开以下与本画面有关的内容：\n1. 主体的外貌、年龄、发型、服装、配饰及可见的材质细节。\n2. 具体动作，包括身体朝向、手部位置、重心、视线和面部表情，让姿态在单张图中能够成立。\n3. 前景、中景、背景的内容，以及人物、物品之间的空间关系和遮挡关系。\n4. 场景中的建筑、家具、道具、使用痕迹和有助于表达时代或地点的细节。\n5. 景别、机位、拍摄角度、透视关系、主体在画面中的位置和留白。\n6. 光源的位置、方向、软硬、颜色，以及它如何影响皮肤、衣料、玻璃或金属。\n7. 整体配色、摄影或绘画表现方式、画面质感与氛围。\n8. 如有文字，明确每段文字的准确内容、所在载体、位置、字形风格和可读性。\n\n保留我明确指定的人数、动作、服装、风格和文字，不擅自替换。\n未指定的纯视觉细节可合理补充，但不要添加新的故事情节、无关人物或相互矛盾的动作。\n不要编造真实产品参数、价格、认证或活动信息。\n用连贯的自然语言分段描述，不要写成标签堆砌。\n每段补充新的可见信息，避免反复强调“高清、精致、杰作”等空泛词。\n不要因为概括而省略关键细节，也不要为了凑长度重复描述。\n按节点要求返回结果，不附加解释或建议。\n",
+        "llama_server_path": "",
+        "mmproj_name": "Qwen3.8/mmproj-F16.gguf",
+        "task": "auto",
+        "backend": "local",
+        "api_base_url": "https://api.openai.com/v1",
+        "api_model": "",
+        "api_key": "",
+        "api_key_env": "MOSS_API_KEY",
+        "api_json_mode": true,
+        "api_max_tokens_field": "max_tokens",
+        "api_send_seed": true,
+        "生成结果": "这是一张充满生活气息的随手拍照片，记录了一位年轻的中国女性在大学女生宿舍内的私密时刻。画面采用手机前置或后置摄像头的广角视角，机位略高于视线水平，呈现出一种未经修饰的真实感。主体是一位二十岁左右的亚洲女性，皮肤在强烈的闪光灯照射下显得异常白皙，甚至带有一层因直射光产生的高光反光。她留着深棕色的长直发，发丝自然垂落在肩头，部分遮挡了脸颊，发质在硬光下呈现出明显的明暗分界。她身穿一件宽松的米白色棉质T恤，领口微松，下身穿着浅灰色的居家短裤，整体着装极度休闲，展现出放松的居家状态。\n\n她正坐在一张单人床的床沿上，身体重心略微前倾，双腿并拢或自然垂下，姿态随意。她的双手握着一部智能手机，屏幕亮着，光线反射在她的下巴和手指上。她的面部表情平静而专注，眼神聚焦在屏幕上，嘴唇微张，似乎正在阅读或打字。由于闪光灯的直射，她的面部轮廓被强化，鼻翼两侧和额头有明显的亮斑，而身后的墙壁则投下了清晰且边缘锐利的阴影，这种高对比度的光影效果是典型的老式闪光灯或近距离LED补光灯的特征。\n\n背景是典型的中国大学宿舍环境，空间紧凑但整洁。她身后是一张铺着浅蓝色床单的床铺，枕头随意地堆放在床头。墙壁上贴着几张色彩鲜艳的海报，其中一张隐约可见中文标语“加油”，另一张则是明星照片。右侧可以看到一个白色的简易书桌，上面堆叠着几本教科书和一个透明的塑料水杯，杯壁上还有水渍。左侧前景有一个半开的衣柜门，露出里面悬挂的几件外套。整个场景充满了生活痕迹，如散落在床边的发圈、桌角的一支笔，这些细节增强了画面的真实感和时代感。整体色调偏冷，以白色、浅蓝和米色为主，但在闪光灯的强光下，色彩饱和度较高，阴影部分则显得深邃，营造出一种既私密又略带生硬的夜间室内氛围。"
+      }
+    },
+    {
+      "id": 59,
+      "type": "PrimitiveStringMultiline",
+      "pos": [
+        -412.5929836094417,
+        -165.99267689332186
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            102
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.41.0",
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        "随手拍，一个美丽的中国女人坐在大学女生宿舍的床上玩手机，穿的十分休闲，闪光灯直闪拍摄，"
+      ],
+      "widgets_values_named": {
+        "value": "随手拍，一个美丽的中国女人坐在大学女生宿舍的床上玩手机，穿的十分休闲，闪光灯直闪拍摄，"
+      }
+    }
+  ],
+  "links": [
+    [
+      54,
+      39,
+      0,
+      38,
+      0,
+      "CLIP"
+    ],
+    [
+      57,
+      38,
+      0,
+      40,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      58,
+      45,
+      0,
+      40,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      62,
+      39,
+      0,
+      45,
+      0,
+      "CLIP"
+    ],
+    [
+      63,
+      40,
+      0,
+      46,
+      0,
+      "LATENT"
+    ],
+    [
+      64,
+      41,
+      0,
+      46,
+      1,
+      "VAE"
+    ],
+    [
+      65,
+      46,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      66,
+      44,
+      0,
+      40,
+      3,
+      "LATENT"
+    ],
+    [
+      70,
+      19,
+      0,
+      44,
+      0,
+      "INT"
+    ],
+    [
+      71,
+      19,
+      1,
+      44,
+      1,
+      "INT"
+    ],
+    [
+      76,
+      47,
+      0,
+      40,
+      0,
+      "MODEL"
+    ],
+    [
+      89,
+      37,
+      0,
+      55,
+      0,
+      "MODEL"
+    ],
+    [
+      95,
+      50,
+      0,
+      55,
+      1,
+      "MODEL"
+    ],
+    [
+      101,
+      58,
+      0,
+      57,
+      0,
+      "STRING"
+    ],
+    [
+      102,
+      59,
+      0,
+      58,
+      1,
+      "STRING"
+    ],
+    [
+      103,
+      58,
+      0,
+      38,
+      1,
+      "STRING"
+    ],
+    [
+      104,
+      19,
+      0,
+      58,
+      2,
+      "INT"
+    ],
+    [
+      105,
+      19,
+      1,
+      58,
+      3,
+      "INT"
+    ],
+    [
+      112,
+      55,
+      0,
+      47,
+      0,
+      "MODEL"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 6,
+      "title": "Models",
+      "bounding": [
+        421.84763469944687,
+        821.0932700946555,
+        480,
+        881.9421705203713
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "Prompt",
+      "bounding": [
+        931.8476346994457,
+        821.0932700946555,
+        580,
+        880
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.6905454545455211,
+      "offset": [
+        1650.4710767862102,
+        366.79496830207427
+      ]
+    },
+    "frontendVersion": "1.57.1",
+    "VHS_latentpreview": true,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

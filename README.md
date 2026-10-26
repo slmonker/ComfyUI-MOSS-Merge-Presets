@@ -69,6 +69,19 @@ git clone https://github.com/slmonker/ComfyUI-MOSS-Merge-Presets.git
 
 Restart ComfyUI after installation.
 
+## Example Workflow
+
+[**Download `moss-merge-model.json`**](example_workflows/moss-merge-model.json)
+
+Drag the downloaded JSON file onto the ComfyUI canvas to import it. The example demonstrates:
+
+- loading MOSS-Image Base and SFT diffusion models;
+- merging them with **MOSS Base+SFT Merge Preset** using `Balanced` and `strength = 1.0`;
+- optional local prompt expansion through **MOSS Prompt Enhancer**;
+- sampling the merged model and saving the generated image.
+
+The workflow requires this custom node and [ComfyUI-MOSS-PromptEnhancer](https://github.com/slmonker/ComfyUI-MOSS-PromptEnhancer) for the `MOSSPromptEnhancerLocal` node. If you do not need prompt expansion, remove or bypass that branch and connect your own positive prompt directly to the sampler. Reselect the Base, SFT, text encoder, and VAE files in their loader nodes if your local filenames differ from the example.
+
 ## Usage
 
 1. Add two diffusion model loaders:
