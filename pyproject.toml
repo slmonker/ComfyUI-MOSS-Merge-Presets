@@ -1,0 +1,19 @@
+[project]
+name = "comfyui-moss-merge-presets"
+version = "1.0.0"
+description = "ComfyUI preset and per-layer Base+SFT merge node for MOSS-Image"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "slmonker" }
+]
+keywords = ["comfyui", "moss-image", "model-merging", "text-to-image"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+]
+
+[tool.comfy]
+PublisherId = "slmonker"
+DisplayName = "MOSS Base+SFT Merge Presets"
