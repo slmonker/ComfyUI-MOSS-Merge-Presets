@@ -17,4 +17,3 @@ classifiers = [
 [tool.comfy]
 PublisherId = "slmonker"
 DisplayName = "MOSS Base+SFT Merge Presets"
-

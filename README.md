@@ -215,5 +215,3 @@ MIT. See [LICENSE](LICENSE).
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md).
-
-

@@ -215,5 +215,3 @@ MIT，详见 [LICENSE](LICENSE)。
 ## 更新记录
 
 详见 [CHANGELOG.md](CHANGELOG.md)。
-
-
