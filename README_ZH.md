@@ -38,6 +38,13 @@
 - 支持把融合后的扩散模型保存到自定义目录，格式为 `.safetensors`。
 - 兼容 ComfyUI 原生 MOSS-Image 加载和采样链。
 
+## 节点说明
+
+| 节点 | 用途 |
+|---|---|
+| **MOSS Base+SFT Merge Preset** | 使用预设或 51 个可编辑组件权重，融合 MOSS Base `MODEL` 与 SFT `MODEL`。 |
+| **MOSS Merge Save Model** | 把融合后的 `MODEL` 保存到自定义目录，输出仅包含扩散模型的 `.safetensors` 文件。 |
+
 ## 环境要求
 
 - 推荐 ComfyUI `0.42.0` 或更新版本。
@@ -92,14 +99,31 @@ SFT MODEL ──┘
 
 ## 保存融合模型
 
-在同一个 `model/merging/moss` 分类中添加 **MOSS Merge Save Model**。
+在同一个 `model/merging/moss` 分类中添加 **MOSS Merge Save Model**，把融合后的 `MODEL` 接到它。
+
+```text
+                              ┌─ ModelSamplingSD3 → SkipLayerGuidanceDiTSimple → KSampler
+Base MODEL ─┐                 │
+            ├─ Merge Preset ──┤
+SFT MODEL ──┘                 │
+                              └─ MOSS Merge Save Model
+```
+
+示例设置：
+
+```text
+output_directory: D:\models\moss_merged
+filename_prefix:  moss_balanced_s100
+overwrite:        false
+save_metadata:    true
+```
 
 - `output_directory`：ComfyUI 所在电脑上的保存目录。可以填写绝对路径，例如 `D:\models\moss`；也可以填写相对路径，例如 `moss_merged`，文件会保存到 `ComfyUI/output/moss_merged`。
 - `filename_prefix`：输出文件名前缀，不需要填写扩展名。
 - `overwrite`：开启后覆盖同名文件；关闭时会自动增加数字后缀。
 - `save_metadata`：可用时把工作流提示词和融合保存信息写入模型元数据。
 
-这个节点保存的是**仅包含扩散模型的 `.safetensors` 文件**，之后使用 **Load Diffusion Model** 加载。如果 Base 是 int8c，保存后的模型仍然保持 int8c 格式。保存过程会先写临时文件，再原子替换目标文件，因此中途失败不会用残缺文件覆盖已有模型。
+这个节点保存的是**仅包含扩散模型的 `.safetensors` 文件**，不包含文本编码器和 VAE；之后使用 **Load Diffusion Model** 加载。如果 Base 是 int8c，保存后的模型仍然保持 int8c 格式。保存过程会先写临时文件，再原子替换目标文件，因此中途失败不会用残缺文件覆盖已有模型。
 
 注意：`output_directory` 是 ComfyUI 主机上的路径，不是浏览器的默认下载目录。
 

@@ -38,6 +38,13 @@ From left to right: **Base**, **SFT**, **Base-preserve**, **Balanced**, and **SF
 - Save the merged diffusion model to a custom directory as `.safetensors`.
 - Compatible with the native ComfyUI MOSS-Image loader and sampling chain.
 
+## Nodes
+
+| Node | Purpose |
+|---|---|
+| **MOSS Base+SFT Merge Preset** | Blends a MOSS Base `MODEL` and SFT `MODEL` using presets or 51 editable component weights. |
+| **MOSS Merge Save Model** | Saves the merged `MODEL` to a custom directory as a diffusion-model-only `.safetensors` file. |
+
 ## Requirements
 
 - ComfyUI `0.42.0` or newer is recommended.
@@ -92,14 +99,31 @@ SFT MODEL ──┘
 
 ## Save the merged model
 
-Add **MOSS Merge Save Model** from the same `model/merging/moss` category.
+Add **MOSS Merge Save Model** from the same `model/merging/moss` category and connect the merged `MODEL` to it.
+
+```text
+                              ┌─ ModelSamplingSD3 → SkipLayerGuidanceDiTSimple → KSampler
+Base MODEL ─┐                 │
+            ├─ Merge Preset ──┤
+SFT MODEL ──┘                 │
+                              └─ MOSS Merge Save Model
+```
+
+Example settings:
+
+```text
+output_directory: D:\models\moss_merged
+filename_prefix:  moss_balanced_s100
+overwrite:        false
+save_metadata:    true
+```
 
 - `output_directory`: the folder on the ComfyUI host machine. Use an absolute path such as `D:\models\moss`, or a relative path such as `moss_merged` to save under `ComfyUI/output/moss_merged`.
 - `filename_prefix`: output filename without the extension.
 - `overwrite`: overwrite the exact target file; otherwise a numeric suffix is added.
 - `save_metadata`: embed the workflow prompt and merge-save metadata when available.
 
-The node writes a diffusion-model-only `.safetensors` file. Load it with **Load Diffusion Model**. If the Base input is int8c, the saved model keeps the int8c layout. Saving is performed through a temporary file and then atomically renamed, so an interrupted save does not replace an existing model with a partial file.
+The node writes a **diffusion-model-only** `.safetensors` file. It does not include the text encoder or VAE. Load the saved file with **Load Diffusion Model**. If the Base input is int8c, the saved model keeps the int8c layout. Saving is performed through a temporary file and then atomically renamed, so an interrupted save does not replace an existing model with a partial file.
 
 ## Presets
 
