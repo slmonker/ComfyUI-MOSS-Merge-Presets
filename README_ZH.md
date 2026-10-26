@@ -34,6 +34,7 @@
 - 支持 MOSS-Image 全部 42 个 DiT block 逐层调节。
 - `merge_info` 实时显示经过 `strength` 缩放后的有效层权重。
 - 除 ComfyUI 本身外不需要额外 Python 依赖。
+- 原生支持 **int8c / convrot Base + SFT** 融合。
 - 兼容 ComfyUI 原生 MOSS-Image 加载和采样链。
 
 ## 环境要求
@@ -42,8 +43,19 @@
 - 官方 MOSS-Image Base / SFT 权重：
   - [MOSS-Image-Base](https://huggingface.co/OpenMOSS-Team/MOSS-Image-Base)
   - [MOSS-Image-SFT](https://huggingface.co/OpenMOSS-Team/MOSS-Image-SFT)
+- 支持 int8c / convrot 量化格式的 Base 和 SFT 扩散模型。
 - ComfyUI 兼容的 MOSS-Image 文本编码器和 Flux.2 VAE。
 - 已在 Windows、RTX 5090、ComfyUI 0.42.0 上测试。
+
+### int8c / convrot 兼容性
+
+节点支持 **int8c Base + int8c SFT** 双量化模型融合：
+
+- `base_model` 与 `sft_model` 可以同时是 int8c / convrot 模型。
+- 融合时由 ComfyUI 原生量化补丁链完成：反量化 SFT 权重、与 Base 做组件级插值、再按 Base 模型的量化布局重新量化。
+- 输出模型保持 `base_model` 的 int8c 量化布局，不会退化为 BF16。
+- `weight_scale`、`comfy_quant` 等量化元数据不会被当作普通权重融合；缩放参数会随反量化/重量化过程重新生成。
+- 第一次加载或首次应用补丁时会比 BF16 融合慢一些，这属于量化权重按需反量化的正常开销。
 
 ## 安装
 

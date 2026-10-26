@@ -56,5 +56,39 @@ class MergeDirectionTests(unittest.TestCase):
         self.assertAlmostEqual(strength_model, 1.0 - expected_sft)
 
 
+class QuantizedCompatibilityTests(unittest.TestCase):
+    def test_quant_metadata_keys_are_recognized(self):
+        for key in (
+            "diffusion_model.layers.0.proj.qkv.weight_scale",
+            "diffusion_model.layers.0.proj.qkv.weight_scale_2",
+            "diffusion_model.layers.0.proj.qkv.input_scale",
+            "diffusion_model.layers.0.proj.qkv.pre_quant_scale",
+            "diffusion_model.layers.0.proj.qkv.comfy_quant",
+        ):
+            self.assertTrue(module._is_quant_metadata_key(key))
+        self.assertFalse(
+            module._is_quant_metadata_key(
+                "diffusion_model.layers.0.proj.qkv.weight"
+            )
+        )
+
+    def test_quantized_extraction_falls_back_when_native_patch_fails(self):
+        sentinel = {"diffusion_model.weight": ["quantized-patch"]}
+
+        class QuantizedModel:
+            def get_key_patches(self, _prefix):
+                raise AttributeError("'Linear' object has no attribute 'weight_scale'")
+
+        original = module._get_filtered_key_patches
+        module._get_filtered_key_patches = lambda _model, _prefix: sentinel
+        try:
+            result = module._get_key_patches_compatible(
+                QuantizedModel(), "diffusion_model."
+            )
+        finally:
+            module._get_filtered_key_patches = original
+        self.assertIs(result, sentinel)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -34,6 +34,7 @@ From left to right: **Base**, **SFT**, **Base-preserve**, **Balanced**, and **SF
 - Per-layer control over all 42 MOSS-Image DiT blocks.
 - A live `merge_info` readout showing effective weights after `strength` scaling.
 - No extra Python dependencies beyond ComfyUI itself.
+- Native **int8c / convrot Base + SFT** merging support.
 - Compatible with the native ComfyUI MOSS-Image loader and sampling chain.
 
 ## Requirements
@@ -42,8 +43,19 @@ From left to right: **Base**, **SFT**, **Base-preserve**, **Balanced**, and **SF
 - Official MOSS-Image Base and SFT weights:
   - [MOSS-Image-Base](https://huggingface.co/OpenMOSS-Team/MOSS-Image-Base)
   - [MOSS-Image-SFT](https://huggingface.co/OpenMOSS-Team/MOSS-Image-SFT)
+- int8c / convrot quantized Base and SFT diffusion models are supported.
 - A ComfyUI-compatible MOSS-Image text encoder and Flux.2 VAE.
 - Tested with ComfyUI 0.42.0 on Windows and an RTX 5090.
+
+### int8c / convrot compatibility
+
+The node supports **int8c Base + int8c SFT** merging:
+
+- Both `base_model` and `sft_model` may be int8c / convrot models.
+- ComfyUI's native quantized patch path dequantizes SFT weights, performs the component-wise interpolation, and requantizes using the Base model's layout.
+- The output keeps `base_model`'s int8c quantization layout instead of falling back to BF16.
+- Quantization metadata such as `weight_scale` and `comfy_quant` is not treated as ordinary mergeable weights; scales are regenerated during requantization.
+- The first patch application can be slower than a BF16 merge because quantized weights are dequantized on demand.
 
 ## Installation
 

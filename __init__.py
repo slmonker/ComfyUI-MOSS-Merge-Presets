@@ -1,10 +1,81 @@
 from __future__ import annotations
 
+import logging
 from typing import Dict
 
 NODE_CLASS_MAPPINGS = {}
 NODE_DISPLAY_NAME_MAPPINGS = {}
 WEB_DIRECTORY = "./web"
+
+# int8c/convrot checkpoints expose extra quantization metadata next to each
+# weight. These keys are not model parameters and must not be merged as if
+# they were weights.
+_QUANT_METADATA_SUFFIXES = (
+    ".weight_scale",
+    ".weight_scale_2",
+    ".input_scale",
+    ".pre_quant_scale",
+    ".comfy_quant",
+)
+
+
+def _is_quant_metadata_key(key: str) -> bool:
+    return key.endswith(_QUANT_METADATA_SUFFIXES)
+
+
+def _get_filtered_key_patches(model, filter_prefix: str):
+    """Return key patches for quantized models without quant metadata keys.
+
+    ComfyUI's ModelPatcher.get_key_patches() walks every state-dict key. For
+    int8c models that includes fields such as ``weight_scale`` and
+    ``comfy_quant``, which are not module attributes and cause an
+    AttributeError before the actual QuantizedTensor weights can be patched.
+
+    The real weight entries remain QuantizedTensor objects. ComfyUI's patch
+    path dequantizes them for interpolation and requantizes the result into
+    the cloned base checkpoint's quantization layout.
+    """
+    import torch
+    import comfy.model_patcher as model_patcher
+
+    patches = {}
+    for key in model.model_state_dict():
+        if filter_prefix is not None and not key.startswith(filter_prefix):
+            continue
+        if _is_quant_metadata_key(key):
+            continue
+
+        try:
+            weight, _, convert_func = model_patcher.get_key_weight(model.model, key)
+        except AttributeError:
+            # Other checkpoint-only metadata can have the same issue.
+            continue
+        if not isinstance(weight, torch.Tensor):
+            continue
+
+        backup = model.backup.get(key)
+        hook_backup = model.hook_backup.get(key)
+        if backup is not None:
+            weight = backup.weight
+        if hook_backup is not None:
+            weight = hook_backup[0]
+        if convert_func is None:
+            convert_func = lambda value, **_: value
+
+        patches[key] = [(weight, convert_func)] + model.patches.get(key, [])
+    return patches
+
+
+def _get_key_patches_compatible(model, filter_prefix: str):
+    """Use native patch extraction, falling back for int8c/convrot models."""
+    try:
+        return model.get_key_patches(filter_prefix)
+    except AttributeError as exc:
+        logging.info(
+            "MOSS merge: using quantized-model-compatible patch extraction (%s)",
+            exc,
+        )
+        return _get_filtered_key_patches(model, filter_prefix)
 
 
 def _build_preset(*, early, early_late, mid_early, mid_late, late_early, late_late, global_scale, final_linear):
@@ -83,7 +154,8 @@ class MOSSMergePreset:
     RETURN_NAMES = ("MODEL",)
     OUTPUT_TOOLTIPS = ("Merged MOSS-Image model",)
     DESCRIPTION = (
-        "MOSS-Image Base + SFT layered merge. Connect Base to base_model and SFT to sft_model. "
+        "MOSS-Image Base + SFT layered merge, including int8c/convrot models. "
+        "Connect Base to base_model and SFT to sft_model. "
         "Select a preset to inspect its exact layer weights, or choose Custom to edit all 51 components."
     )
 
@@ -123,7 +195,7 @@ class MOSSMergePreset:
             weights = PRESETS[preset]
 
         merged = base_model.clone()
-        key_patches = sft_model.get_key_patches("diffusion_model.")
+        key_patches = _get_key_patches_compatible(sft_model, "diffusion_model.")
         ordered_weights = sorted(weights.items(), key=lambda item: len(item[0]), reverse=True)
 
         for key, patches in key_patches.items():
