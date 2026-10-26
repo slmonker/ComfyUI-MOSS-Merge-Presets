@@ -1,6 +1,10 @@
 from pathlib import Path
 import importlib.util
+import sys
+import tempfile
+import types
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("moss_merge_presets", ROOT / "__init__.py")
@@ -88,6 +92,51 @@ class QuantizedCompatibilityTests(unittest.TestCase):
         finally:
             module._get_filtered_key_patches = original
         self.assertIs(result, sentinel)
+
+
+class SaveNodeTests(unittest.TestCase):
+    def test_filename_prefix_is_sanitized(self):
+        self.assertEqual(
+            module._sanitize_filename_prefix('my/merge:name?.safetensors'),
+            "my_merge_name_",
+        )
+        self.assertEqual(module._sanitize_filename_prefix("  "), "moss_merge")
+
+    def test_relative_output_directory_uses_comfyui_output(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            stub = types.ModuleType("folder_paths")
+            stub.get_output_directory = lambda: temp_dir
+            with mock.patch.dict(sys.modules, {"folder_paths": stub}):
+                resolved = module._resolve_output_directory("moss_merged")
+            self.assertEqual(str(resolved), str(Path(temp_dir) / "moss_merged"))
+
+    def test_absolute_output_directory_is_preserved(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            target = str(Path(temp_dir) / "custom" / "moss")
+            stub = types.ModuleType("folder_paths")
+            stub.get_output_directory = lambda: temp_dir
+            with mock.patch.dict(sys.modules, {"folder_paths": stub}):
+                resolved = module._resolve_output_directory(target)
+            self.assertEqual(str(resolved), target)
+
+    def test_next_model_path_avoids_overwrite(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            directory = Path(temp_dir)
+            first = module._next_model_path(directory, "merged", False)
+            self.assertEqual(first.name, "merged.safetensors")
+            first.touch()
+            second = module._next_model_path(directory, "merged", False)
+            self.assertEqual(second.name, "merged_00001_.safetensors")
+
+    def test_save_node_is_registered(self):
+        self.assertEqual(
+            module.NODE_CLASS_MAPPINGS["MOSSMergeSaveModel"],
+            module.MOSSMergeSaveModel,
+        )
+        self.assertEqual(
+            module.NODE_DISPLAY_NAME_MAPPINGS["MOSSMergeSaveModel"],
+            "MOSS Merge Save Model",
+        )
 
 
 if __name__ == "__main__":
