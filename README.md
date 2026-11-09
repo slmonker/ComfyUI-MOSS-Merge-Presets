@@ -60,6 +60,12 @@ The node supports **int8c Base + int8c SFT** merging:
 
 ## Installation
 
+### ComfyUI Manager
+
+Search for **MOSS Base+SFT Merge Presets** in ComfyUI Manager, or install Registry ID `comfyui-moss-merge-presets`.
+
+[Comfy Registry page](https://registry.comfy.org/nodes/comfyui-moss-merge-presets)
+
 Clone this repository into your ComfyUI custom nodes directory:
 
 ```bash
